@@ -54,7 +54,6 @@ async def on_message(message):
 
         num = roman_to_int(rank)
         url = f'https://opgg-static.akamaized.net/images/medals/{tier.lower()}_{num}.png?image=q_auto:best&v=1'
-        print(url)
 
         emb = discord.Embed(title='Clasificatoria en solitario', description=f'{tier} {rank}')
         emb.set_image(url=url)
