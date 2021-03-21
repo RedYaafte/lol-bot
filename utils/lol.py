@@ -33,7 +33,11 @@ class Lol(LolSettings):
         return {'greetings': greetings, 'icon_url': icon_url}
 
     def ranks(self):
-        pass
+        summoner = self.start()
+        summoner_id = summoner['id']
+        name = summoner['name']
+        response = requests.get(f'https://la1.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}', headers=self.headers)
+        return response.json()[0]
 
     def champion_mastery(self):
         summoner = self.start()
