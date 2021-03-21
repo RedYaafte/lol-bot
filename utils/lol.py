@@ -64,5 +64,5 @@ class Lol(LolSettings):
                 skin_num.append(s.get('num'))
 
         skin_r = random.choice(skin_num)
-        skin_url = f'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Thresh_{skin_r}.jpg'
+        skin_url = f'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/{champion_name}_{skin_r}.jpg'
         return {'name': champion_name, 'lvl': champion_data['championLevel'], 'skin_url': skin_url}
