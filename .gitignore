@@ -1,4 +1,5 @@
 .env
 venv/
 .vscode/
+es_MX/
 __pycache__/
