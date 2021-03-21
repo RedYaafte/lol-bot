@@ -31,7 +31,15 @@ async def on_message(message):
         await message.channel.send(embed=emb)
     
     if message.content.startswith('$champion'):
-        await message.channel.send('https://giphy.com/gifs/leagueoflegends-swag-league-of-legends-ez-lqut5VxPEhP9zCJdUT')
-        
+        lol = Lol('', 'LAN')
+        mastery = lol.champion_mastery()
+        lvl = mastery['lvl']
+        points = mastery['points']
+        description =  f'Nivel: {lvl} \nPuntos: {points}'
+
+        emb = discord.Embed(title=mastery['name'], description=description)
+        emb.set_image(url=mastery['skin_url'])
+        await message.channel.send(embed=emb)
+
 
 client.run(os.getenv('TOKEN_DISCORD'))
