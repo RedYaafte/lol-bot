@@ -3,6 +3,7 @@ import discord
 
 from utils.giphy import get_giphy
 from utils.lol import Lol
+from utils.utl import roman_to_int
 
 
 client = discord.Client()
@@ -39,6 +40,27 @@ async def on_message(message):
 
         emb = discord.Embed(title=mastery['name'], description=description)
         emb.set_image(url=mastery['skin_url'])
+        await message.channel.send(embed=emb)\
+    
+    if message.content.startswith('$rank'):
+        lol = Lol('', 'LAN')
+        ranked = lol.ranks()
+
+        tier = ranked['tier']
+        rank = ranked['rank']
+        league_points = ranked['leaguePoints']
+        wins = ranked['wins']
+        losses = ranked['losses']
+
+        num = roman_to_int(rank)
+        url = f'https://opgg-static.akamaized.net/images/medals/{tier.lower()}_{num}.png?image=q_auto:best&v=1'
+        print(url)
+
+        emb = discord.Embed(title='Clasificatoria en solitario', description=f'{tier} {rank}')
+        emb.set_image(url=url)
+        emb.insert_field_at(index=0, name='LP', value=league_points)
+        emb.insert_field_at(index=1, name='V', value=wins)
+        emb.insert_field_at(index=2, name='L', value=losses)
         await message.channel.send(embed=emb)
 
 
