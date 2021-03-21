@@ -1,4 +1,5 @@
 import os
+import json
 import random
 import requests
 from dotenv import load_dotenv
@@ -35,34 +36,33 @@ class Lol(LolSettings):
         pass
 
     def champion_mastery(self):
-        """
-            Terminar de probar porque ubo fallas por tantas peticiones
-        """
         summoner = self.start()
         summoner_id = summoner['id']
         url = f'https://la1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}'
         response = requests.get(url, headers=self.headers)
-
         champion_data = response.json()[0]
         champion_id = champion_data['championId']
-        res = requests.get('http://ddragon.leagueoflegends.com/cdn/11.6.1/data/en_US/champion.json')
-        data = res.json()['data']
+
+        # For this step, do you need download  latest data dragon for https://developer.riotgames.com/docs/lol
+        with open('es_MX/champion.json') as json_file: 
+            data = json.load(json_file)
 
         champion_name = None
-        for x, y in data.items():
+        for x, y in data['data'].items():
             key = int(y.get('key', 1))
             if key == champion_id:
                 champion_name = y.get('name')
-        # champion_name = [y.get('name') for x, y in data.items() if int(y.get('key', 1)) == champion_id]
 
-        resp = requests.get(f'http://ddragon.leagueRoflegends.com/cdn/11.6.1/data/en_US/champion/{champion_name}.json')
-        d = resp.json()['data']
+        with open(f'es_MX/champion/{champion_name}.json') as json_file: 
+            d = json.load(json_file)
 
         skin_num = []
-        for x, y in d.items():
+        for x, y in d['data'].items():
             for s in y.get('skins'):
                 skin_num.append(s.get('num'))
 
         skin_r = random.choice(skin_num)
         skin_url = f'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/{champion_name}_{skin_r}.jpg'
-        return {'name': champion_name, 'lvl': champion_data['championLevel'], 'skin_url': skin_url}
+        return {
+            'name': champion_name, 'lvl': champion_data['championLevel'],
+            'points': champion_data['championPoints'], 'skin_url': skin_url}
