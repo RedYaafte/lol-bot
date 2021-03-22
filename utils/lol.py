@@ -36,7 +36,8 @@ class Lol(LolSettings):
         summoner = self.start()
         summoner_id = summoner['id']
         name = summoner['name']
-        response = requests.get(f'https://la1.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}', headers=self.headers)
+        url = f'https://la1.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}'
+        response = requests.get(url, headers=self.headers)
         return response.json()[0]
 
     def champion_mastery(self):
@@ -55,7 +56,7 @@ class Lol(LolSettings):
         for x, y in data['data'].items():
             key = int(y.get('key', 1))
             if key == champion_id:
-                champion_name = y.get('name')
+                champion_name = y.get('id')
 
         with open(f'es_MX/champion/{champion_name}.json') as json_file: 
             d = json.load(json_file)
